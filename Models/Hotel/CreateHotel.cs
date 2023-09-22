@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.API.Models.Hotel
 {
-    public class CreateHotel
+    public class CreateHotel : BaseHotel
     {
     }
 }
