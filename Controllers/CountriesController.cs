@@ -4,12 +4,14 @@ using HotelListing.API.Data;
 using HotelListing.API.Models.Country;
 using AutoMapper;
 using HotelListing.API.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelListing.API.Controllers
 {
     //Controller Route
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CountriesController : ControllerBase
     {
         private readonly ICountriesRepository _countries;
@@ -35,6 +37,7 @@ namespace HotelListing.API.Controllers
 
         // GET: api/Countries/5
         //Specify Template 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCountry>> GetCountry(int id)
         {

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using HotelListing.API.Data;
+using HotelListing.API.Models.Hotel;
+using HotelListing.API.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HotelListing.API.Data;
-using HotelListing.API.Repository.IRepository;
-using AutoMapper;
-using HotelListing.API.Models.Hotel;
-using HotelListing.API.Models.Country;
 
 namespace HotelListing.API.Controllers
 {
@@ -20,7 +14,7 @@ namespace HotelListing.API.Controllers
         private readonly IHotelRepository _hotels;
         private readonly IMapper _mapper;
 
-        public HotelsController(IHotelRepository hotels,IMapper mapper)
+        public HotelsController(IHotelRepository hotels, IMapper mapper)
         {
             _hotels = hotels;
             _mapper = mapper;
@@ -91,7 +85,7 @@ namespace HotelListing.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(CreateHotel createHotel)
         {
-            var hotel=_mapper.Map<Hotel>(createHotel);
+            var hotel = _mapper.Map<Hotel>(createHotel);
             await _hotels.Add(hotel);
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
         }
@@ -107,7 +101,7 @@ namespace HotelListing.API.Controllers
             }
 
             await _hotels.Delete(hotel);
-        
+
 
             return NoContent();
         }

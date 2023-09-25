@@ -1,5 +1,9 @@
 ﻿namespace HotelListing.API.Repository.IRepository
 {
+
+    /*
+     * Generic Repository Design Pattern Implementation
+     * For CRUD Operation**/
     public interface IGenericRepository<T> where T : class
     {
         Task Add(T entity);
