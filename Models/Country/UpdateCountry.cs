@@ -2,7 +2,7 @@
 
 namespace HotelListing.API.Models.Country
 {
-    public class UpdateCountry:BaseCountry
+    public class UpdateCountry : BaseCountry
     {
         [Required]
         public int Id { set; get; }

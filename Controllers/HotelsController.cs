@@ -2,6 +2,7 @@
 using HotelListing.API.Data;
 using HotelListing.API.Models.Hotel;
 using HotelListing.API.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace HotelListing.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    //[Authorize]
     public class HotelsController : ControllerBase
     {
         private readonly IHotelRepository _hotels;
@@ -100,7 +103,7 @@ namespace HotelListing.API.Controllers
                 return NotFound();
             }
 
-            await _hotels.Delete(hotel);
+            await _hotels.Delete(id);
 
 
             return NoContent();

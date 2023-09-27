@@ -16,7 +16,7 @@ namespace HotelListing.API.Repository.IRepository
         Task<string> CreateRefreshToken();
 
         Task<ApiUserAuthenticationResponse> VerifyRefreshToken(ApiUserAuthenticationResponse request);
-        
+
 
 
     }

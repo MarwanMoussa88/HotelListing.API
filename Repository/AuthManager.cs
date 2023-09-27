@@ -3,7 +3,7 @@ using HotelListing.API.Data;
 using HotelListing.API.Models.User;
 using HotelListing.API.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -35,7 +35,7 @@ namespace HotelListing.API.Repository
         public async Task<string> CreateRefreshToken()
         {
             //Removes the old authentication token from the database so attackers can't use them
-            await _userManager.RemoveAuthenticationTokenAsync(_user,_loginProvider, _refreshToken);
+            await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider, _refreshToken);
             //Generate a refresh token 
             var refreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider, _refreshToken);
             //Set the refresh token to the user in the database 
@@ -62,7 +62,7 @@ namespace HotelListing.API.Repository
             //Generate Token
             var token = await GenerateToken();
             //Return the token and UserId
-            return new ApiUserAuthenticationResponse { Token = token, UserId = _user.Id , RefreshToken = await CreateRefreshToken() };
+            return new ApiUserAuthenticationResponse { Token = token, UserId = _user.Id, RefreshToken = await CreateRefreshToken() };
 
 
 
@@ -88,12 +88,12 @@ namespace HotelListing.API.Repository
 
         }
 
-        
+
         public async Task<ApiUserAuthenticationResponse> VerifyRefreshToken(ApiUserAuthenticationResponse request)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var tokenContent= jwtSecurityTokenHandler.ReadJwtToken(request.Token);
-            var username= tokenContent.Claims.ToList().FirstOrDefault(x=> x.Type==JwtRegisteredClaimNames.Email)?.Value;
+            var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(request.Token);
+            var username = tokenContent.Claims.ToList().FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email)?.Value;
             _user = await _userManager.FindByNameAsync(username);
 
             if (_user == null)
@@ -102,7 +102,7 @@ namespace HotelListing.API.Repository
             var isRefreshTokenValid = await _userManager.VerifyUserTokenAsync(_user, _loginProvider,
                 _refreshToken, request.RefreshToken);
 
-            if(isRefreshTokenValid)
+            if (isRefreshTokenValid)
             {
                 var token = await GenerateToken();
                 return new ApiUserAuthenticationResponse
@@ -115,7 +115,7 @@ namespace HotelListing.API.Repository
             await _userManager.UpdateSecurityStampAsync(_user);
             return null;
         }
-        
+
 
         /*
          * Generate JWT Bearer Token**/
@@ -157,7 +157,7 @@ namespace HotelListing.API.Repository
                 //User claims
                 claims: claims,
                 //Token expire date
-                expires: DateTime.Now.AddMilliseconds(5000),
+                expires: DateTime.Now.AddMinutes(15),
                 //Token Key
                 signingCredentials: credentials
                 );
